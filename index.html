@@ -1,0 +1,71 @@
+
+<!DOCTYPE html>
+<html lang="fi">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Animaatiotesti</title>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/lottie-web/5.9.6/lottie.min.js"></script>
+    <style>
+        body {
+            background-color: #faeaee !important; /* Varmistetaan, että tausta näkyy Chromessa */
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            height: 100vh;
+            margin: 0;
+        }
+        #lottie-container {
+            width: 100%;
+            max-width: 1200px;
+            height: auto;
+        }
+    </style>
+</head>
+<body>
+
+<div id="lottie-container"></div>
+
+<script>
+    console.log("Ladataan animaatio...");
+    
+    var animation = lottie.loadAnimation({
+        container: document.getElementById('lottie-container'),
+        renderer: 'svg',
+        loop: false, // Poistetaan looppaus
+        autoplay: true, // Varmistetaan automaattinen käynnistys
+        path: 'onko-sinulla-harrastus_test_no_loop_final_fixed.json' // JSON-polku
+    });
+
+    animation.addEventListener('data_ready', function() {
+        console.log("Animaatiodata ladattu!");
+        animation.playSegments([0, animation.totalFrames], true); // Pakotetaan animaation käynnistyminen
+    });
+
+    animation.addEventListener('DOMLoaded', function() {
+        console.log("Animaatio ladattu selaimeen.");
+        animation.play(); // Varmistetaan käynnistys
+    });
+
+    animation.addEventListener('complete', function() {
+        console.log("Animaatio päättynyt.");
+        setTimeout(function() {
+            animation.stop(); // Pakotetaan animaatio pysähtymään
+        }, 500);
+    });
+
+    setTimeout(function() {
+        animation.goToAndStop(animation.totalFrames - 1, true); // Pakotetaan pysähtymään viimeiseen frameen
+    }, (animation.totalFrames / animation.frameRate) * 1000);
+
+    let checkLoop = setInterval(function() {
+        if (!animation.isPaused) {
+            console.log("Loop havaitty, pysäytetään animaatio.");
+            animation.stop();
+            clearInterval(checkLoop);
+        }
+    }, 100);
+</script>
+
+</body>
+</html>
